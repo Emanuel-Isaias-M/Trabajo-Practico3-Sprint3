@@ -1,16 +1,24 @@
-class IRepository {
+class IRepository{
     obtenerPorId(id){
-        throw new Error("Metodo 'obtenerPorId()' no implementado");
+        throw new Error('Metodo obtenerPorID() no implementado');
     }
+
     obtenerTodos(){
-        throw new Error("Método 'obtenerTodos()' no implementado");
+        throw new Error('Metodo obtenerTodos() no implementado');
     }
-    buscarPorAtributo(atributo, valor){
-        throw new Error ("Metodo 'buscarPorAtributo()' no implmentado");
+
+    buscarPorAtributo(){
+        throw new Error('bucarPorAtributo() no implementado');
     }
-    obtenerMayoresDe30() {
-        throw new Error("Metodo 'obtenerMayoresDe30()' no implementado");
+
+    obtenerMayoresDe30(){
+        throw new Error('Metodo obtenerMayoresDe30() no implementado');
     }
+
+    insertarSuperheroe(nuevoSuperheroe){
+        throw new Error ('Metodo insertarSuperheroe() no implementado')
+    }
+
 }
 
 export default IRepository;

@@ -1,61 +1,60 @@
-import Superhero from "../models/SuperHero.mjs";
-import IRepository from "../repositories/IRepository.mjs";
+import SuperHero from '../models/SuperHero.mjs';
+import IRepository from './IRepository.mjs';
+//implementa metodos definidos en la interfaz
 
-class SuperheroeRepository extends IRepository {
-  
-  async obtenerTodos() {
-    return await Superhero.find({});
-  };
+class SuperHeroRepository extends IRepository{
 
-  async insertSuperheroe(nuevoSuperheroe) {
-    const { nombreSuperHeroe,
-      nombreReal,
-      edad,
-      planetaOrigen,
-      debilidad,
-      poderes,
-      aliados,
-      enemigos,
-      creador
-    } = nuevoSuperheroe;
-  
-    const newSpuerheroe = new Superhero({
-      nombreSuperHeroe,
-      nombreReal,
-      edad,
-      planetaOrigen,
-      debilidad,
-      poderes,
-      aliados,
-      enemigos,
-      creador
-    });
-  
-    const savedSuperheroe = await newSpuerheroe.save();
-    return savedSuperheroe;
-  };
+    async obtenerPorId(id){
+        return await SuperHero.findById(id);
+    }
 
-  async updateSuperheroe(idSuperheroe, superheroeActualizado) {
-    const updateSuperheroeNew = await Superhero.findByIdAndUpdate(idSuperheroe, superheroeActualizado, {
-      new: true,
-    });
-    if (!updateSuperheroeNew) return res.status(404).json({ message: "Superhero no found" });
-    return updateSuperheroeNew
-  };
+    async obtenerTodos(){
+        return await SuperHero.find ({});
+    }
 
-  async deleteSuperheroeById(id) {
-    const deleteSuperheroeId = await Superhero.findByIdAndDelete(id);
-    if (!deleteSuperheroeId) return res.status(404).json({ message: "Superhero no found" });
-    // return res.sendStatus(204);
-    return deleteSuperheroeId;
-  };
+    async buscarPorAtributo(atributo, valor){
+      return await SuperHero.find({ [atributo]: valor });
+    }
 
-  async deleteSuperheroeByName(nombre) {
-    const deleteSuperheroeName = await Superhero.findOneAndDelete({ nombreSuperHeroe: nombre });
-    if (!deleteSuperheroeName) return res.status(404).json({ message: "Superhero no found" });
-    // return res.sendStatus(204);
-    return deleteSuperheroeName;
-  };
+    async obtenerMayoresDe30() {
+        return await SuperHero.find( { $and : [
+            { edad : { $gt : 30 } },
+            { planetaOrigen : "Tierra" },
+            { $expr: { $gt: [{ $size: "$poderes" }, 2] } } 
+        ] } );
+        
+    }
+
+    async insertarSuperheroe(nuevoSuperheroe) {
+        const superheroe = new SuperHero(nuevoSuperheroe);
+        return await superheroe.save();
+    }
+
+    async actualizarSuperheroe(id,datosActualizados) {
+        const {nombreSuperHeroe,nombreReal,edad,planetaOrigen,debilidad,poderes,aliados,enemigos,creador} = datosActualizados;
+        const superheroe = await SuperHero.findOneAndUpdate(
+
+        { _id: id }, 
+
+        { $set: { nombreSuperHeroe:nombreSuperHeroe,nombreReal:nombreReal,edad:edad,planetaOrigen:planetaOrigen,debilidad:debilidad,poderes:poderes,aliados:aliados,enemigos:enemigos,creador:creador} },
+
+        { new: true }
+
+      )
+
+      return superheroe; 
 }
+       
 
-export default new SuperheroeRepository();
+    async borrarPorNombre(nombreSuperHeroe) {
+            return await SuperHero.findOneAndDelete({ nombreSuperHeroe: nombreSuperHeroe });
+           }
+       
+           async borrarPorId(id) {
+            return await SuperHero.findByIdAndDelete(id);
+           }
+       
+       
+        }
+    
+        export default new SuperHeroRepository;

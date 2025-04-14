@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Superhéroes - Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: radial-gradient(circle at top, #1a1a1a, #000);
+      color: #fff;
+      padding: 20px;
+    }
+
+    h1 {
+      font-family: 'Bangers', cursive;
+      font-size: 3.5rem;
+      text-align: center;
+      color: #f1c40f;
+      text-shadow: 3px 3px 0 #e74c3c, 6px 6px 0 #2980b9;
+      margin-bottom: 40px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: #2c3e50;
+      border: 4px solid #e74c3c;
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.9);
+    }
+
+    .card h3 {
+      font-family: 'Bangers', cursive;
+      font-size: 1.8rem;
+      margin: 0 0 10px;
+      color: #f1c40f;
+    }
+
+    .card p, .card small {
+      margin: 6px 0;
+      font-size: 0.95rem;
+    }
+
+    .card strong {
+      color: #1abc9c;
+    }
+
+    .acciones {
+      margin-top: 15px;
+    }
+
+    .acciones a button,
+    .acciones form button {
+      background: #f39c12;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      font-family: 'Bangers', cursive;
+      margin-right: 10px;
+    }
+
+    .acciones a button:hover {
+      background: #d35400;
+    }
+
+    .acciones .delete-btn {
+      background: #c0392b;
+    }
+
+    .acciones .delete-btn:hover {
+      background: #922b21;
+    }
+
+    .agregar-btn {
+      display: block;
+      width: fit-content;
+      margin: 40px auto 0;
+      padding: 12px 24px;
+      background: #27ae60;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 20px;
+      font-family: 'Bangers', cursive;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: background 0.3s ease;
+    }
+
+    .agregar-btn:hover {
+      background: #1e8449;
+    }
+  </style>
+</head>
+<body>
+  <h1>¡Superhéroes en Acción!</h1>
+
+  <div class="grid-container">
+    <% superheroes.forEach(superheroe => { %>
+      <div class="card">
+        <h3><%= superheroe.nombreSuperHeroe %></h3>
+        <small><strong>Nombre real:</strong> <%= superheroe.nombreReal %></small>
+        <p><strong>Edad:</strong> <%= superheroe.edad %></p>
+        <p><strong>Planeta:</strong> <%= superheroe.planetaOrigen %></p>
+        <p><strong>Debilidad:</strong> <%= superheroe.debilidad.join(', ') %></p>
+        <p><strong>Poderes:</strong> <%= superheroe.poderes.join(', ') %></p>
+        <p><strong>Aliados:</strong> <%= superheroe.aliados.join(', ') %></p>
+        <p><strong>Enemigos:</strong> <%= superheroe.enemigos.join(', ') %></p>
+
+        <div class="acciones">
+          <a href="/api/formulario/modificar-heroe/<%= superheroe._id %>">
+            <button class="edit-btn">Editar</button>
+          </a>
+          <form action="/api/heroes/borrar-id/<%= superheroe._id %>?_method=DELETE" method="POST" style="display:inline;" onsubmit="return confirm('¿Seguro que querés borrar a <%= superheroe.nombreSuperHeroe %>?');">
+            <button type="submit" class="delete-btn">Borrar</button>
+          </form>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+  <a class="agregar-btn" href="/api/formulario/crear">+ Agregar Superhéroe</a>
+</body>
+</html>
